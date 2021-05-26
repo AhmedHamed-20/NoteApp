@@ -49,6 +49,8 @@ class AddNoteScreen extends StatelessWidget {
                                 onTap: () {
                                   titlecontroler.clear();
                                   bodycontroler.clear();
+                                  Appcubit.get(context)
+                                      .deleColorValueWhenBack();
                                   Navigator.of(context).pop();
                                 },
                                 child: Container(

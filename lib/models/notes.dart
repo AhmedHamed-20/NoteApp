@@ -1,13 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 
+final TextEditingController titlecontroler = TextEditingController();
 
-
-
-  final TextEditingController titlecontroler = TextEditingController();
-
-  final TextEditingController bodycontroler = TextEditingController();
-
-
-
-
+final TextEditingController bodycontroler = TextEditingController();
