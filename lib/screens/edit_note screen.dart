@@ -84,14 +84,16 @@ class EditNoteScreen extends StatelessWidget {
                                   titleEditcontroler.text = titleChangingValue;
                                   Appcubit.get(context).updateDateBase(
                                     color: Appcubit.get(context).pickedColor,
-                                    body: bodyEditcontroler.text,
-                                    title: titleEditcontroler.text,
+                                    body: bodyEditcontroler.text
+                                        .replaceAll('"', '\''),
+                                    title: titleEditcontroler.text
+                                        .replaceAll('"', '\''),
                                     id: index,
                                   );
                                   Navigator.of(context).pop();
                                 },
                                 child: Container(
-                                  width: 80,
+                                  width: 100,
                                   padding: EdgeInsets.all(12),
                                   decoration: BoxDecoration(
                                     color: Color(0xff3a3a3a),
@@ -99,7 +101,7 @@ class EditNoteScreen extends StatelessWidget {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'save',
+                                      'Save Edit',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,

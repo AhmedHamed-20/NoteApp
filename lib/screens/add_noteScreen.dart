@@ -79,7 +79,9 @@ class AddNoteScreen extends StatelessWidget {
                                         body: bodycontroler.text
                                             .trim()
                                             .replaceAll('"', '\''),
-                                        title: titlecontroler.text.trim(),
+                                        title: titlecontroler.text
+                                            .trim()
+                                            .replaceAll('"', '\''),
                                         color:
                                             Appcubit.get(context).pickedColor,
                                         time: DateFormat.yMMMMd()
