@@ -76,12 +76,8 @@ class AddNoteScreen extends StatelessWidget {
                                         .showSnackBar(snackBar);
                                   } else {
                                     Appcubit.get(context).insertIntoDataBase(
-                                        body: bodycontroler.text
-                                            .trim()
-                                            .replaceAll('"', '\''),
-                                        title: titlecontroler.text
-                                            .trim()
-                                            .replaceAll('"', '\''),
+                                        body: bodycontroler.text.trim(),
+                                        title: titlecontroler.text.trim(),
                                         color:
                                             Appcubit.get(context).pickedColor,
                                         time: DateFormat.yMMMMd()

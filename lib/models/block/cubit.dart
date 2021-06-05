@@ -84,10 +84,9 @@ class Appcubit extends Cubit<AppState> {
       @required String color,
       String time}) async {
     await database.transaction((txn) {
-      txn
-          .rawInsert(
-              'INSERT INTO notes(title,body,color,time) VALUES("$title","$body","$color","$time")')
-          .then(
+      txn.rawInsert(
+          'INSERT INTO notes(title, body, color,time) VALUES(?, ?, ?, ?)',
+          ['$title', '$body', '$color', '$time']).then(
         (value) {
           print('Inserted succ');
           emit(AppInsertDataBase());

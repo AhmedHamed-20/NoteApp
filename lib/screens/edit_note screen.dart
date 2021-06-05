@@ -84,10 +84,8 @@ class EditNoteScreen extends StatelessWidget {
                                   titleEditcontroler.text = titleChangingValue;
                                   Appcubit.get(context).updateDateBase(
                                     color: Appcubit.get(context).pickedColor,
-                                    body: bodyEditcontroler.text
-                                        .replaceAll('"', '\''),
-                                    title: titleEditcontroler.text
-                                        .replaceAll('"', '\''),
+                                    body: bodyEditcontroler.text,
+                                    title: titleEditcontroler.text,
                                     id: index,
                                   );
                                   Navigator.of(context).pop();
