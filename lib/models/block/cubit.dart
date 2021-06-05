@@ -21,7 +21,7 @@ class Appcubit extends Cubit<AppState> {
     false,
   ];
   Database database;
-  bool isDark = true;
+  bool isDark = false;
 
   void toggleDarkTheme({bool valueFromCach}) {
     if (valueFromCach != null) {
