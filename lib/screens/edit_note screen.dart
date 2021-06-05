@@ -42,11 +42,14 @@ class EditNoteScreen extends StatelessWidget {
       bloc: Appcubit(),
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Color(0xff252526),
+          backgroundColor: Appcubit.get(context).isDark == true
+              ? Color(0xff252526)
+              : Colors.white,
           body: SafeArea(
             child: Padding(
               padding: EdgeInsets.all(15),
               child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
                 child: Container(
                   height: height,
                   child: Column(
@@ -67,13 +70,18 @@ class EditNoteScreen extends StatelessWidget {
                                   width: 40,
                                   padding: EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: Color(0xff3a3a3a),
+                                    color: Appcubit.get(context).isDark == true
+                                        ? Color(0xff3a3a3a)
+                                        : Colors.grey[300],
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Center(
                                     child: Icon(
                                       Icons.arrow_back_ios,
-                                      color: Colors.white,
+                                      color:
+                                          Appcubit.get(context).isDark == true
+                                              ? Colors.white
+                                              : Colors.black,
                                     ),
                                   ),
                                 ),
@@ -94,14 +102,19 @@ class EditNoteScreen extends StatelessWidget {
                                   width: 100,
                                   padding: EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: Color(0xff3a3a3a),
+                                    color: Appcubit.get(context).isDark == true
+                                        ? Color(0xff3a3a3a)
+                                        : Colors.grey[300],
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Center(
                                     child: Text(
                                       'Save Edit',
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color:
+                                            Appcubit.get(context).isDark == true
+                                                ? Colors.white
+                                                : Colors.black,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -123,7 +136,10 @@ class EditNoteScreen extends StatelessWidget {
                                   ),
                                   child: TextField(
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color:
+                                          Appcubit.get(context).isDark == true
+                                              ? Colors.white
+                                              : Colors.black,
                                       fontSize: 18,
                                     ),
                                     controller: titleEditcontroler,
@@ -136,10 +152,16 @@ class EditNoteScreen extends StatelessWidget {
                                     },
                                     decoration: InputDecoration(
                                       focusColor: Colors.transparent,
-                                      fillColor: Colors.white,
+                                      fillColor:
+                                          Appcubit.get(context).isDark == true
+                                              ? Colors.white
+                                              : Colors.black,
                                       hintText: 'Title',
                                       hintStyle: TextStyle(
-                                        color: Colors.grey,
+                                        color:
+                                            Appcubit.get(context).isDark == true
+                                                ? Colors.grey
+                                                : Colors.black,
                                         fontSize: 24,
                                         letterSpacing: 0.5,
                                         fontWeight: FontWeight.bold,
@@ -157,11 +179,17 @@ class EditNoteScreen extends StatelessWidget {
                                   ),
                                   child: Container(
                                     child: TextField(
-                                      cursorColor: Colors.white,
+                                      cursorColor:
+                                          Appcubit.get(context).isDark == true
+                                              ? Colors.white
+                                              : Colors.black,
                                       keyboardType: TextInputType.multiline,
                                       maxLines: null,
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color:
+                                            Appcubit.get(context).isDark == true
+                                                ? Colors.white
+                                                : Colors.black,
                                         fontSize: 18,
                                       ),
                                       controller: bodyEditcontroler,

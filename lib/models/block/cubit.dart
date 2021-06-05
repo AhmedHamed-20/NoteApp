@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes/models/block/states.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../darkModeCach.dart';
+
 class Appcubit extends Cubit<AppState> {
   Appcubit() : super(AppintiState());
   static Appcubit get(context) => BlocProvider.of(context);
@@ -19,6 +21,18 @@ class Appcubit extends Cubit<AppState> {
     false,
   ];
   Database database;
+  bool isDark = true;
+
+  void toggleDarkTheme({bool valueFromCach}) {
+    if (valueFromCach != null) {
+      isDark = valueFromCach;
+      emit(ThemeMode());
+    } else {
+      isDark = !isDark;
+      SaveToCach.putDate(key: 'isDark', isDark: isDark).then((value) {});
+      emit(ThemeMode());
+    }
+  }
 
   List<Map> notes = [];
   void changeColor(String color) {

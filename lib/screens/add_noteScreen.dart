@@ -30,11 +30,14 @@ class AddNoteScreen extends StatelessWidget {
     return BlocBuilder<Appcubit, AppState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Color(0xff252526),
+          backgroundColor: Appcubit.get(context).isDark == true
+              ? Color(0xff252526)
+              : Colors.white,
           body: SafeArea(
             child: Padding(
               padding: EdgeInsets.all(15),
               child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
                 child: Container(
                   height: height,
                   child: Column(
@@ -57,13 +60,18 @@ class AddNoteScreen extends StatelessWidget {
                                   width: 40,
                                   padding: EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: Color(0xff3a3a3a),
+                                    color: Appcubit.get(context).isDark == true
+                                        ? Color(0xff3a3a3a)
+                                        : Colors.grey[300],
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Center(
                                     child: Icon(
                                       Icons.arrow_back_ios,
-                                      color: Colors.white,
+                                      color:
+                                          Appcubit.get(context).isDark == true
+                                              ? Colors.white
+                                              : Colors.black,
                                     ),
                                   ),
                                 ),
@@ -91,14 +99,19 @@ class AddNoteScreen extends StatelessWidget {
                                   width: 80,
                                   padding: EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: Color(0xff3a3a3a),
+                                    color: Appcubit.get(context).isDark == true
+                                        ? Color(0xff3a3a3a)
+                                        : Colors.grey[300],
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Center(
                                     child: Text(
                                       'save',
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color:
+                                            Appcubit.get(context).isDark == true
+                                                ? Colors.white
+                                                : Colors.black,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -120,16 +133,25 @@ class AddNoteScreen extends StatelessWidget {
                                   ),
                                   child: TextField(
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color:
+                                          Appcubit.get(context).isDark == true
+                                              ? Colors.white
+                                              : Colors.black,
                                       fontSize: 18,
                                     ),
                                     controller: titlecontroler,
                                     decoration: InputDecoration(
                                       focusColor: Colors.transparent,
-                                      fillColor: Colors.white,
+                                      fillColor:
+                                          Appcubit.get(context).isDark == true
+                                              ? Colors.white
+                                              : Colors.black,
                                       hintText: 'Title',
                                       hintStyle: TextStyle(
-                                        color: Colors.grey,
+                                        color:
+                                            Appcubit.get(context).isDark == true
+                                                ? Colors.grey
+                                                : Colors.black,
                                         fontSize: 24,
                                         letterSpacing: 0.5,
                                         fontWeight: FontWeight.bold,
@@ -147,11 +169,17 @@ class AddNoteScreen extends StatelessWidget {
                                   ),
                                   child: Container(
                                     child: TextField(
-                                      cursorColor: Colors.white,
+                                      cursorColor:
+                                          Appcubit.get(context).isDark == true
+                                              ? Colors.white
+                                              : Colors.black,
                                       keyboardType: TextInputType.multiline,
                                       maxLines: null,
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color:
+                                            Appcubit.get(context).isDark == true
+                                                ? Colors.white
+                                                : Colors.black,
                                         fontSize: 18,
                                       ),
                                       controller: bodycontroler,
@@ -160,7 +188,10 @@ class AddNoteScreen extends StatelessWidget {
                                         fillColor: Colors.white,
                                         hintText: 'Type somthing...',
                                         hintStyle: TextStyle(
-                                          color: Colors.grey,
+                                          color: Appcubit.get(context).isDark ==
+                                                  true
+                                              ? Colors.grey
+                                              : Colors.black,
                                           fontSize: 20,
                                         ),
                                         border: InputBorder.none,

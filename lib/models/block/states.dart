@@ -17,3 +17,5 @@ class AppDeleteFromDataBase extends AppState {}
 class DeletPickedColorValue extends AppState {}
 
 class Unselect extends AppState {}
+
+class ThemeMode extends AppState {}

@@ -15,7 +15,9 @@ class HomeScreen extends StatelessWidget {
     return BlocBuilder<Appcubit, AppState>(
       builder: (context, state) {
         return Scaffold(
-            backgroundColor: Color(0xff252526),
+            backgroundColor: Appcubit.get(context).isDark == true
+                ? Color(0xff252526)
+                : Colors.white,
             appBar: AppBar(
               backwardsCompatibility: false,
               systemOverlayStyle: SystemUiOverlayStyle(
@@ -26,27 +28,59 @@ class HomeScreen extends StatelessWidget {
               title: Text(
                 'Notes',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Appcubit.get(context).isDark == true
+                      ? Colors.white
+                      : Colors.black,
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              actions: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Appcubit.get(context).toggleDarkTheme();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    primary: Appcubit.get(context).isDark == true
+                        ? Color(0xff252526)
+                        : Colors.white,
+                  ),
+                  icon: Center(
+                    child: Icon(
+                      Appcubit.get(context).isDark == true
+                          ? Icons.light_mode
+                          : Icons.dark_mode,
+                      color: Appcubit.get(context).isDark == true
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ),
+                  label: Text(''),
+                )
+              ],
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (ctx) => AddNoteScreen()));
               },
-              backgroundColor: Colors.black,
+              backgroundColor: Appcubit.get(context).isDark == true
+                  ? Colors.black
+                  : Colors.white,
               child: Icon(
                 Icons.add,
                 size: 30,
+                color: Appcubit.get(context).isDark == true
+                    ? Colors.white
+                    : Colors.black,
               ),
             ),
             body: Padding(
-                padding: const EdgeInsets.all(15),
+                padding: const EdgeInsets.only(right: 15, left: 15),
                 child: Appcubit.get(context).notes.length > 0
                     ? StaggeredGridView.countBuilder(
+                        physics: BouncingScrollPhysics(),
                         crossAxisCount: 2,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
@@ -76,13 +110,21 @@ class HomeScreen extends StatelessWidget {
                                     builder: (_) => AlertDialog(
                                           title: Text(
                                             'Are you sure ?',
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(
+                                                color: Appcubit.get(context)
+                                                            .isDark ==
+                                                        true
+                                                    ? Colors.white
+                                                    : Colors.black),
                                           ),
                                           content: Text(
                                             'Delete this note ?',
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(
+                                                color: Appcubit.get(context)
+                                                            .isDark ==
+                                                        true
+                                                    ? Colors.white
+                                                    : Colors.black),
                                           ),
                                           actions: [
                                             TextButton(
@@ -92,7 +134,11 @@ class HomeScreen extends StatelessWidget {
                                               child: Text(
                                                 'No',
                                                 style: TextStyle(
-                                                    color: Colors.white),
+                                                    color: Appcubit.get(context)
+                                                                .isDark ==
+                                                            true
+                                                        ? Colors.white
+                                                        : Colors.black),
                                               ),
                                             ),
                                             TextButton(
@@ -107,11 +153,19 @@ class HomeScreen extends StatelessWidget {
                                               child: Text(
                                                 'Yes',
                                                 style: TextStyle(
-                                                    color: Colors.white),
+                                                    color: Appcubit.get(context)
+                                                                .isDark ==
+                                                            true
+                                                        ? Colors.white
+                                                        : Colors.black),
                                               ),
                                             ),
                                           ],
-                                          backgroundColor: Color(0xff252526),
+                                          backgroundColor:
+                                              Appcubit.get(context).isDark ==
+                                                      true
+                                                  ? Color(0xff252526)
+                                                  : Colors.white,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10)),
@@ -134,7 +188,9 @@ class HomeScreen extends StatelessWidget {
                         child: Text(
                           'press + button and add new notes',
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Appcubit.get(context).isDark == true
+                                  ? Colors.white
+                                  : Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 20),
                         ),
