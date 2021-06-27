@@ -105,6 +105,7 @@ class HomeScreen extends StatelessWidget {
                                 );
                               },
                               onLongPress: () {
+                                HapticFeedback.mediumImpact();
                                 showDialog(
                                     context: context,
                                     builder: (_) => AlertDialog(

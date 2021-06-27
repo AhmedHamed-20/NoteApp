@@ -23,6 +23,8 @@ class Notes extends StatelessWidget {
               children: [
                 Text(
                   title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -34,6 +36,8 @@ class Notes extends StatelessWidget {
                 ),
                 Text(
                   body,
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18,

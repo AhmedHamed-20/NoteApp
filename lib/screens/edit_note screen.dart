@@ -47,11 +47,14 @@ class EditNoteScreen extends StatelessWidget {
               : Colors.white,
           body: SafeArea(
             child: Padding(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.only(
+                left: 15,
+                right: 15,
+                top: 15,
+              ),
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Container(
-                  height: height,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
