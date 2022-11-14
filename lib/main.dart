@@ -1,37 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes/models/block/cubit.dart';
-import 'package:notes/screens/home_screen.dart';
+import 'package:notes/core/cache/chache_setup.dart';
+import 'package:notes/core/database/database_setup.dart';
+import 'package:notes/core/theme/app_theme.dart';
+import 'package:notes/features/notes/view/screens/all_notes_screen.dart';
 
-import 'models/darkModeCach.dart';
+import 'core/services/service_locator.dart';
+import 'features/notes/view_model/cubit/notes_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SaveToCach.init();
-  bool valueFromShared = SaveToCach.getData('isDark');
-  runApp(MyApp(valueFromShared));
+  await CacheHelper.init();
+  ServiceLocator.init();
+  await DatabaseProvider.init(
+      databasesName: 'notes.db',
+      query:
+          'CREATE TABLE notes (id INTEGER PRIMARY KEY, title TEXT, body TEXT, color TEXT,time TEXT)',
+      version: 1);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  bool valueFromCach;
-  MyApp(this.valueFromCach);
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<Appcubit>(
-          create: (BuildContext context) => Appcubit()
-            ..createData()
-            ..toggleDarkTheme(valueFromCach: valueFromCach),
-        ),
+        BlocProvider(
+          create: (context) => serviceLocator<NotesCubit>()
+            ..getNotes()
+            ..getCachedThemeMode(key: 'isDark'),
+        )
       ],
-      child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.green,
-          ),
-          home: HomeScreen()),
+      child: BlocBuilder<NotesCubit, NoteState>(
+        builder: (context, state) {
+          return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Note App',
+              themeMode: state.themeModeValue.index == 0
+                  ? ThemeMode.light
+                  : ThemeMode.dark,
+              theme: AppTheme.lightMode,
+              darkTheme: AppTheme.darkMode,
+              home: const AllNotesScreen());
+        },
+      ),
     );
   }
 }
