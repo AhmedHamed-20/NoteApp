@@ -48,7 +48,7 @@ class DeleteNoteAlertDoalogWidget extends StatelessWidget {
               ),
             ),
           ],
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         );

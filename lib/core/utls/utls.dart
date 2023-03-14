@@ -26,3 +26,10 @@ enum ThemeModeValue {
   light,
   dark,
 }
+
+enum AuthRequestStatus {
+  idle,
+  loading,
+  success,
+  failure,
+}

@@ -1,5 +1,6 @@
 import 'package:notes/core/cache/chache_setup.dart';
 import 'package:notes/core/database/database_setup.dart';
+import 'package:notes/core/services/service_locator.dart';
 import 'package:notes/features/notes/models/notes_model.dart';
 import 'package:notes/core/error/failure.dart';
 import 'package:dartz/dartz.dart';
@@ -68,7 +69,8 @@ class NotesLocalRepositoryImpl extends NotesBaseRepository {
   @override
   Future<Either<Failure, bool>> getActiceTheme(ActiveThemeParams params) async {
     try {
-      final result = await CacheHelper.getData(key: params.key);
+      final result =
+          await serviceLocator<CacheHelper>().getData(key: params.key);
       return Right(result ?? false);
     } on Exception catch (e) {
       return Left(CacheFailure(message: e.toString()));
@@ -79,7 +81,8 @@ class NotesLocalRepositoryImpl extends NotesBaseRepository {
   Future<Either<Failure, void>> setActiveTheme(
       ActiveThemeSetParams params) async {
     try {
-      final result = CacheHelper.setData(key: params.key, value: params.value);
+      final result = serviceLocator<CacheHelper>()
+          .setData(key: params.key, value: params.value);
       return Right(result);
     } on Exception catch (e) {
       return Left(CacheFailure(message: e.toString()));
