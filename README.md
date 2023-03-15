@@ -1,16 +1,22 @@
-# notes
+# Note App
+This is a Flutter note-taking app that allows users to save their notes both locally and online on Firebase. The app allows users to create, view, update, and delete notes. Users can also sync their notes across different devices by logging in with their Google account.
 
-A new Flutter project.
+# Features
+- Create, view, update, and delete notes
+- Save notes locally on the device
+- Sync notes online on Firebase
+- Sign in with Google account to access notes across different devices
+- Sign in or sign up with regular email and password
+- Material design UI
 
-## Getting Started
+# The app uses the following dependencies:
 
-This project is a starting point for a Flutter application.
+- flutter_bloc for state management
+- cloud_firestore for online database management
+- google_sign_in for user authentication
+- fireAuth for email and password sign in
+- shared_preferences for local data storage
+- get_it for dependency injection
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Caution
+don't forget to add firebase integration if you decide to use this repo.
