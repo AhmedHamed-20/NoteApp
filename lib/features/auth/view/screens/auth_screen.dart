@@ -8,7 +8,7 @@ import 'package:notes/core/const/const.dart';
 import 'package:notes/core/services/service_locator.dart';
 import 'package:notes/features/notes/view/screens/all_notes_screen.dart';
 
-import '../../../../core/const/google_clinet_id.dart';
+import '../../../../core/const/google_client_id.dart';
 import '../../../notes/view_model/cubit/notes_cubit.dart';
 import '../../repositories/base/base_auth_local_repository.dart';
 import '../../view_model/cubit/auth_cubit.dart';
