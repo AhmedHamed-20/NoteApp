@@ -59,7 +59,11 @@ class MyApp extends StatelessWidget {
                 : ThemeMode.dark,
             theme: AppTheme.lightMode,
             darkTheme: AppTheme.darkMode,
-            home: skipAuth ? const AllNotesScreen() : const AuthScreen(),
+            home: skipAuth
+                ? const AllNotesScreen()
+                : const AuthScreen(
+                    isFirstTime: true,
+                  ),
           );
         },
       ),

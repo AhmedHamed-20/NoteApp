@@ -15,14 +15,21 @@ class SwitchAccountAlertDialogWidget extends StatelessWidget {
     final notesCubit = BlocProvider.of<NotesCubit>(context);
     final authCubit = BlocProvider.of<AuthCubit>(context);
     return AlertDialog(
-        title: const Text(AppStrings.switchAccount),
-        content: const Text(AppStrings.areYouSureYouWantToSwitchAccount),
+        title: Text(
+          AppStrings.switchAccount,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        content: Text(
+          AppStrings.areYouSureYouWantToSwitchAccount,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text(AppStrings.no),
+            child: Text(AppStrings.no,
+                style: Theme.of(context).textTheme.titleMedium),
           ),
           TextButton(
             onPressed: () {
@@ -32,7 +39,8 @@ class SwitchAccountAlertDialogWidget extends StatelessWidget {
                   context: context);
               notesCubit.deleteAllLocalNotes();
             },
-            child: const Text(AppStrings.yes),
+            child: Text(AppStrings.yes,
+                style: Theme.of(context).textTheme.titleMedium),
           ),
         ]);
   }

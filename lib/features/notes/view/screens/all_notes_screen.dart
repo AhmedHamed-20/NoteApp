@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:notes/core/const/app_strings.dart';
 import 'package:notes/core/const/const.dart';
 import 'package:notes/core/theme/app_theme.dart';
 
@@ -41,7 +42,7 @@ class _AllNotesScreenState extends State<AllNotesScreen> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             title: Text(
-              'Notes',
+              AppStrings.notes,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             actions: [
@@ -49,10 +50,12 @@ class _AllNotesScreenState extends State<AllNotesScreen> {
                 onPressed: () {
                   if (state.themeModeValue.index == 0) {
                     notesCubit.changeActiceTheme(AppTheme.lightMode);
-                    notesCubit.cacheThemeMode(key: 'isDark', isDark: true);
+                    notesCubit.cacheThemeMode(
+                        key: AppStrings.isDarkThemeModeKey, isDark: true);
                   } else {
                     notesCubit.changeActiceTheme(AppTheme.darkMode);
-                    notesCubit.cacheThemeMode(key: 'isDark', isDark: false);
+                    notesCubit.cacheThemeMode(
+                        key: AppStrings.isDarkThemeModeKey, isDark: false);
                   }
                 },
                 style: ElevatedButton.styleFrom(

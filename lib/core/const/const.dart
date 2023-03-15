@@ -176,8 +176,6 @@ void flutterToast({
   );
 }
 
-TextEditingController titleControler = TextEditingController();
-TextEditingController bodyControler = TextEditingController();
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
 

@@ -5,6 +5,7 @@ import '../const/const.dart';
 
 class AppTheme {
   static ThemeData lightMode = ThemeData(
+    useMaterial3: true,
     colorScheme: ColorScheme.light(
         background: AppColors.backgroundColorWhite,
         secondary: AppColors.primaryColor,
@@ -16,33 +17,18 @@ class AppTheme {
     ),
 
     textTheme: TextTheme(
-      bodyLarge: GoogleFonts.roboto(
-          fontSize: AppFontSize.s18, color: AppColors.subtitleTextColor),
-      bodyMedium: GoogleFonts.roboto(
-        color: AppColors.subtitleTextColor,
-        fontSize: AppFontSize.s16,
-        fontWeight: FontWeight.bold,
-      ),
-      bodySmall: GoogleFonts.roboto(
-        color: AppColors.subtitleTextColor,
-        fontSize: AppFontSize.s16,
-      ),
-      labelMedium: GoogleFonts.roboto(
-        color: AppColors.titleTextColor,
-        fontSize: AppFontSize.s16,
-      ),
       titleLarge: GoogleFonts.roboto(
         color: AppColors.titleTextColor,
-        fontSize: AppFontSize.s16,
+        fontSize: AppFontSize.s18,
         fontWeight: FontWeight.bold,
       ),
       titleSmall: GoogleFonts.roboto(
         color: AppColors.titleTextColor,
-        fontSize: AppFontSize.s12,
+        fontSize: AppFontSize.s14,
       ),
       titleMedium: GoogleFonts.roboto(
         color: AppColors.titleTextColor,
-        fontSize: AppFontSize.s14,
+        fontSize: AppFontSize.s16,
       ),
     ),
 
@@ -66,6 +52,8 @@ class AppTheme {
   );
 
   static ThemeData darkMode = ThemeData(
+    useMaterial3: true,
+
     colorScheme: ColorScheme.dark(
         background: AppColors.backgroundColorDark,
         secondary: AppColors.primaryColor,
@@ -77,33 +65,18 @@ class AppTheme {
     ),
 
     textTheme: TextTheme(
-      bodyLarge: GoogleFonts.roboto(
-          fontSize: AppFontSize.s18, color: AppColors.subtitleTextColor),
-      bodyMedium: GoogleFonts.roboto(
-        color: AppColors.subtitleTextColor,
-        fontSize: AppFontSize.s16,
-        fontWeight: FontWeight.bold,
-      ),
-      bodySmall: GoogleFonts.roboto(
-        color: AppColors.subtitleTextColor,
-        fontSize: AppFontSize.s16,
-      ),
-      labelMedium: GoogleFonts.roboto(
-        color: AppColors.titleTextColorDark,
-        fontSize: AppFontSize.s16,
-      ),
       titleLarge: GoogleFonts.roboto(
         color: AppColors.titleTextColorDark,
-        fontSize: AppFontSize.s16,
+        fontSize: AppFontSize.s18,
         fontWeight: FontWeight.bold,
       ),
       titleSmall: GoogleFonts.roboto(
         color: AppColors.titleTextColorDark,
-        fontSize: AppFontSize.s12,
+        fontSize: AppFontSize.s14,
       ),
       titleMedium: GoogleFonts.roboto(
         color: AppColors.titleTextColorDark,
-        fontSize: AppFontSize.s14,
+        fontSize: AppFontSize.s16,
       ),
     ),
 

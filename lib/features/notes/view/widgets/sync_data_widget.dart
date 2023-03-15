@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/core/const/const.dart';
 import 'package:notes/core/services/service_locator.dart';
-import 'package:notes/core/widget/cached_network_image_circle_photo.dart';
 import 'package:notes/features/notes/view/widgets/switch_account_alert_dialog_widget.dart';
 import 'package:notes/features/notes/view/widgets/sync_notes_alert_dialog.dart';
 
@@ -35,12 +34,18 @@ class _SyncDataWidgetState extends State<SyncDataWidget> {
                     builder: (context) =>
                         const SwitchAccountAlertDialogWidget());
               },
-              child: CachedNetworkImageCirclePhoto(
-                photoUrl:
-                    serviceLocator<FirebaseAuth>().currentUser!.photoURL ??
-                        AppAssets.defaultImage,
-                photoRadius: 40,
-              ),
+              child: serviceLocator<FirebaseAuth>().currentUser!.photoURL ==
+                      null
+                  ? const CircleAvatar(
+                      radius: AppRadius.r25,
+                      backgroundImage: AssetImage(AppAssets.noImage),
+                    )
+                  : CircleAvatar(
+                      radius: AppRadius.r25,
+                      backgroundImage: NetworkImage(
+                        serviceLocator<FirebaseAuth>().currentUser!.photoURL!,
+                      ),
+                    ),
             )
           : IconButton(
               icon: Icon(Icons.sync, color: Theme.of(context).iconTheme.color),
