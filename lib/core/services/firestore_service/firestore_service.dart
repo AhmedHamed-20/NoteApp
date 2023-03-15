@@ -66,4 +66,13 @@ class FirestoreService {
           .delete();
     }
   }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getNotesFromFirebase(
+      {required String userId}) async {
+    return await _firestore
+        .collection(AppStrings.collectionUsers)
+        .doc(userId)
+        .collection(AppStrings.collectionNotes)
+        .get();
+  }
 }

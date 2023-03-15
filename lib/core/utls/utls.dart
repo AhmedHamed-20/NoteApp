@@ -33,3 +33,10 @@ enum AuthRequestStatus {
   success,
   failure,
 }
+
+enum ReadNotesFromFirebaseAndStoreItInDatabaseRequestStatus {
+  idle,
+  loading,
+  success,
+  failure,
+}

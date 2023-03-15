@@ -22,9 +22,8 @@ void main() async {
       await serviceLocator<CacheHelper>().getData(key: AppStrings.skipSignIn) ??
           false;
   await DatabaseProvider.init(
-      databasesName: 'notes.db',
-      query:
-          'CREATE TABLE notes (dataBaseId INTEGER PRIMARY KEY, title TEXT, body TEXT, color TEXT,time TEXT, myId INTEGER)',
+      databasesName: '${AppStrings.tableName}.db',
+      query: AppStrings.createDataBaseQuery,
       version: 1);
   runApp(MyApp(
     skipAuth: skipAuth,

@@ -1,4 +1,5 @@
 import 'package:notes/core/cache/chache_setup.dart';
+import 'package:notes/core/const/app_strings.dart';
 import 'package:notes/core/database/database_setup.dart';
 import 'package:notes/core/services/service_locator.dart';
 import 'package:notes/features/notes/models/notes_model.dart';
@@ -18,8 +19,7 @@ class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
           params.noteDate,
           params.myId
         ],
-        query:
-            'INSERT INTO notes(title, body, color,time, myId) VALUES(?, ?, ?, ?, ?)',
+        query: AppStrings.insertIntoDataBaseQuery,
       );
       return Right(result);
     } on Exception catch (e) {
@@ -45,7 +45,8 @@ class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
       final result = await DatabaseProvider.getAllDataFromDatabase(
         params.tableName,
       );
-      return Right(List.from(result.map((e) => NotesModel.fromMap(e))));
+      return Right(List.from(result
+          .map((e) => NotesModel.fromMap(map: e, isFromFirebase: false))));
     } on Exception catch (e) {
       return Left(DatabaseFailure(message: e.toString()));
     }
@@ -54,14 +55,12 @@ class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
   @override
   Future<Either<Failure, void>> updateNote(NoteUpdateParams params) async {
     try {
-      await DatabaseProvider.updateDataBase(
-          'UPDATE ${params.tableName} SET  title= ?, body = ? ,color= ? WHERE dataBaseId = ?',
-          [
-            params.noteTitle,
-            params.noteBody,
-            params.noteColor,
-            params.databaseId
-          ]);
+      await DatabaseProvider.updateDataBase(AppStrings.updateDataBaseQuer, [
+        params.noteTitle,
+        params.noteBody,
+        params.noteColor,
+        params.databaseId
+      ]);
       return const Right(null);
     } on Exception catch (e) {
       return Left(DatabaseFailure(message: e.toString()));
@@ -88,6 +87,29 @@ class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
       return const Right(null);
     } on Exception catch (e) {
       return Left(CacheFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Object?>>> insertNotes(
+      InsertNotesToDatabaseParams params) async {
+    try {
+      final result = await DatabaseProvider.insertListToDatabase(params.notes);
+      return Right(result);
+    } on Exception catch (e) {
+      return Left(DatabaseFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteAllNotes(
+      DeleteAllNotesParams params) async {
+    try {
+      await DatabaseProvider.deleteAllDataFromDatabase(
+          tableName: params.tableName);
+      return const Right(null);
+    } on Exception catch (e) {
+      return Left(DatabaseFailure(message: e.toString()));
     }
   }
 }

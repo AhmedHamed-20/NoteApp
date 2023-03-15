@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:notes/core/const/app_strings.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -30,7 +31,7 @@ class DatabaseProvider {
         .rawDelete('DELETE FROM $tableName WHERE  dataBaseId=$id');
   }
 
-  static Future<int> deleteAllDataCartsFromDatabase(
+  static Future<int> deleteAllDataFromDatabase(
       {required String tableName}) async {
     return await database.rawDelete('DELETE FROM $tableName');
   }
@@ -41,6 +42,15 @@ class DatabaseProvider {
       query,
       data,
     );
+  }
+
+  static Future<List<Object?>> insertListToDatabase(
+      List<Map<String, dynamic>> data) async {
+    final batch = database.batch();
+    for (var element in data) {
+      batch.insert(AppStrings.tableName, element);
+    }
+    return await batch.commit();
   }
 
   static Future<int> updateDataBase(String query, List arguments) async {

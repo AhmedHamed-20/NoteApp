@@ -7,15 +7,19 @@ import 'package:notes/core/const/const.dart';
 import 'package:notes/core/services/service_locator.dart';
 import 'package:notes/features/notes/view/screens/all_notes_screen.dart';
 
+import '../../../notes/view_model/cubit/notes_cubit.dart';
 import '../../repositories/base/base_auth_local_repository.dart';
 import '../../view_model/cubit/auth_cubit.dart';
 
 class AuthScreen extends StatelessWidget {
-  const AuthScreen({super.key});
-
+  const AuthScreen(
+      {super.key, this.isSwitchingAccount = false, this.isSyncing = false});
+  final bool isSwitchingAccount;
+  final bool isSyncing;
   @override
   Widget build(BuildContext context) {
     final authCubit = BlocProvider.of<AuthCubit>(context);
+    final notesCubit = BlocProvider.of<NotesCubit>(context);
     return StreamBuilder<User?>(
         stream: serviceLocator<FirebaseAuth>().authStateChanges(),
         builder: (context, snapshot) {
@@ -47,6 +51,12 @@ class AuthScreen extends StatelessWidget {
               skipSignIn: true,
               key: AppStrings.skipSignIn,
             ));
+            if (isSwitchingAccount == true) {
+              notesCubit.getNotesFromFirebase(userId: snapshot.data!.uid);
+            }
+            if (isSyncing == true) {
+              notesCubit.syncNotesToFirebase(snapshot.data!.uid);
+            }
             return const AllNotesScreen(
               signedIn: true,
             );

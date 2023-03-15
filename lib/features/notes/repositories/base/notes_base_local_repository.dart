@@ -10,6 +10,10 @@ abstract class NotesBaseLocalRepository {
   Future<Either<Failure, void>> deleteNoteById(NoteDeleteParams params);
   Future<Either<Failure, bool>> getActiceTheme(ActiveThemeParams params);
   Future<Either<Failure, void>> setActiveTheme(ActiveThemeSetParams params);
+  Future<Either<Failure, List<Object?>>> insertNotes(
+      InsertNotesToDatabaseParams params);
+
+  Future<Either<Failure, void>> deleteAllNotes(DeleteAllNotesParams params);
 }
 
 class ActiveThemeParams extends Equatable {
@@ -91,6 +95,32 @@ class NoteDeleteParams extends Equatable {
   @override
   List<Object?> get props => [
         databaseId,
+        tableName,
+      ];
+}
+
+class InsertNotesToDatabaseParams extends Equatable {
+  final List<Map<String, dynamic>> notes;
+
+  const InsertNotesToDatabaseParams(
+    this.notes,
+  );
+
+  @override
+  List<Object?> get props => [
+        notes,
+      ];
+}
+
+class DeleteAllNotesParams extends Equatable {
+  final String tableName;
+
+  const DeleteAllNotesParams(
+    this.tableName,
+  );
+
+  @override
+  List<Object?> get props => [
         tableName,
       ];
 }

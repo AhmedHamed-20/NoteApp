@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 //CREATE TABLE notes (id INTEGER PRIMARY KEY, title TEXT, body TEXT, Color TEXT,time TEXT
@@ -32,19 +31,31 @@ class NotesModel extends Equatable {
     };
   }
 
-  factory NotesModel.fromMap(Map<String, dynamic> map) {
+  static Map<String, dynamic> toDataBaseMap(NotesModel notesModel) {
+    return <String, dynamic>{
+      'dataBaseId': notesModel.dataBaseId,
+      'title': notesModel.title,
+      'myId': notesModel.myId,
+      'body': notesModel.body,
+      'date': notesModel.date.toString(),
+      'color': notesModel.color,
+    };
+  }
+
+  factory NotesModel.fromMap(
+      {required Map<String, dynamic> map, bool? isFromFirebase = false}) {
     return NotesModel(
       dataBaseId: map['dataBaseId'] as int,
       title: map['title'] as String,
       body: map['body'] as String,
       myId: map['myId'] as int,
-      date: DateTime.parse(map['time'] as String),
+      date: isFromFirebase == true
+          ? (map['date'] as Timestamp).toDate()
+          : DateTime.parse(map['date'] as String),
       color: map['color'] as String,
     );
   }
 
-  factory NotesModel.fromJson(String source) =>
-      NotesModel.fromMap(json.decode(source) as Map<String, dynamic>);
   @override
   List<Object?> get props => [dataBaseId, title, body, date, color, myId];
 }

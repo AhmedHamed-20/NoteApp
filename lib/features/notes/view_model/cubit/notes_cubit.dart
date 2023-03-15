@@ -35,8 +35,8 @@ class NotesCubit extends Cubit<NoteState> {
   }
 
   Future<void> getNotes() async {
-    final result =
-        await notesBaseRepository.getNotes(const NotesGetParams('notes'));
+    final result = await notesBaseRepository
+        .getNotes(const NotesGetParams(AppStrings.tableName));
     result.fold((l) {
       emit(state.copyWith(
           notesStatus: GetNotesRequestStatus.failure, errorMessage: l.message));
@@ -50,7 +50,7 @@ class NotesCubit extends Cubit<NoteState> {
 
   Future<void> deleteNoteFromDatabaseById(int databaseId, int myId) async {
     final result = await notesBaseRepository
-        .deleteNoteById(NoteDeleteParams(databaseId, 'notes'));
+        .deleteNoteById(NoteDeleteParams(databaseId, AppStrings.tableName));
     result.fold((l) {
       emit(state.copyWith(
           notesDeleteStatus: DeleteNotesByIdRequestStatus.failure,
@@ -65,24 +65,26 @@ class NotesCubit extends Cubit<NoteState> {
     });
   }
 
-  Future<void> addNoteToDatabase(
-      {required String noteTitle,
-      required String noteBody,
-      required String noteColor,
-      required String noteDate}) async {
+  Future<void> addNoteToDatabase({
+    required String noteTitle,
+    required String noteBody,
+    required String noteColor,
+    required String noteDate,
+    int? myId,
+  }) async {
     final result = await notesBaseRepository.addNote(NoteAddingParams(
         noteBody: noteBody,
         noteColor: noteColor,
         noteDate: noteDate,
-        myId: state.notes.length + 1,
+        myId: myId ?? state.notes.length + 1,
         noteTitle: noteTitle,
-        tableName: 'notes'));
+        tableName: AppStrings.tableName));
     result.fold((l) {
       emit(state.copyWith(
           notesAddStatus: AddNotesRequestStatus.failure,
           errorMessage: l.message));
     }, (r) {
-      saveNoteToFirebaseIfSignedInAndHaveInternet(
+      saveNoteToFirebaseIfSignedIn(
         NotesModel(
           dataBaseId: state.notes.length + 1,
           color: noteColor,
@@ -104,7 +106,7 @@ class NotesCubit extends Cubit<NoteState> {
       required int databaseId}) async {
     final result = await notesBaseRepository.updateNote(NoteUpdateParams(
         databaseId: databaseId,
-        tableName: 'notes',
+        tableName: AppStrings.tableName,
         noteBody: noteBody,
         noteColor: noteColor,
         noteTitle: noteTitle));
@@ -172,8 +174,7 @@ class NotesCubit extends Cubit<NoteState> {
     });
   }
 
-  void saveNoteToFirebaseIfSignedInAndHaveInternet(
-      NotesModel notesModel) async {
+  void saveNoteToFirebaseIfSignedIn(NotesModel notesModel) async {
     if (serviceLocator<FirebaseAuth>().currentUser != null) {
       await saveNoteToFirebase(
         SaveUserNotesToFirestoreParams(
@@ -237,6 +238,57 @@ class NotesCubit extends Cubit<NoteState> {
           firebaseId: firebaseId,
         ),
       );
+    }
+  }
+
+  Future<void> getNotesFromFirebase({required String userId}) async {
+    emit(state.copyWith(
+        readNotesFromFirebaseAndStoreItInDatabaseRequestStatus:
+            ReadNotesFromFirebaseAndStoreItInDatabaseRequestStatus.loading));
+    final result = await baseRemoteNotesRepository
+        .getNotesFromFirebase(GetNotesFromFirebaseParams(userId: userId));
+
+    result.fold((l) {
+      emit(state.copyWith(
+          readNotesFromFirebaseAndStoreItInDatabaseRequestStatus:
+              ReadNotesFromFirebaseAndStoreItInDatabaseRequestStatus.failure,
+          errorMessage: l.message));
+    }, (r) {
+      if (r.isNotEmpty) {
+        insertListOfNotesToDatabase(r);
+      }
+      emit(state.copyWith(
+          readNotesFromFirebaseAndStoreItInDatabaseRequestStatus:
+              ReadNotesFromFirebaseAndStoreItInDatabaseRequestStatus.success,
+          errorMessage: ''));
+    });
+  }
+
+  Future<void> insertListOfNotesToDatabase(List<NotesModel> notes) async {
+    final List<Map<String, dynamic>> listOfNotes =
+        notes.map((e) => NotesModel.toDataBaseMap(e)).toList();
+    final result = await notesBaseRepository
+        .insertNotes(InsertNotesToDatabaseParams(listOfNotes));
+    result.fold((l) {
+      emit(state.copyWith(errorMessage: l.message));
+    }, (r) {
+      getNotes();
+    });
+  }
+
+  Future<void> deleteAllLocalNotes() async {
+    final result = await notesBaseRepository
+        .deleteAllNotes(const DeleteAllNotesParams(AppStrings.tableName));
+    result.fold((l) {
+      emit(state.copyWith(errorMessage: l.message));
+    }, (r) {
+      emit(state.copyWith(errorMessage: '', notes: List.from([])));
+    });
+  }
+
+  void syncNotesToFirebase(String userId) {
+    for (var element in state.notes) {
+      saveNoteToFirebaseIfSignedIn(element);
     }
   }
 }

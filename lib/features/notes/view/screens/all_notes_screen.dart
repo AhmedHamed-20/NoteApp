@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:notes/core/const/const.dart';
 import 'package:notes/core/theme/app_theme.dart';
 
@@ -9,9 +10,20 @@ import '../widgets/all_notes_widgets/note_widget.dart';
 import '../widgets/sync_data_widget.dart';
 import 'edit_add_note_screen.dart';
 
-class AllNotesScreen extends StatelessWidget {
+class AllNotesScreen extends StatefulWidget {
   const AllNotesScreen({super.key, this.signedIn = false});
   final bool signedIn;
+
+  @override
+  State<AllNotesScreen> createState() => _AllNotesScreenState();
+}
+
+class _AllNotesScreenState extends State<AllNotesScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var notesCubit = BlocProvider.of<NotesCubit>(context);
@@ -52,7 +64,16 @@ class AllNotesScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              if (!signedIn) const SyncDataWidget(),
+              FutureBuilder<bool>(
+                future: InternetConnectionChecker().hasConnection,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return SyncDataWidget(hasInternet: snapshot.data!);
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -75,5 +96,10 @@ class AllNotesScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<bool> checkInternet() async {
+    var result = await InternetConnectionChecker().hasConnection;
+    return result;
   }
 }

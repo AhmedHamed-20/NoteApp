@@ -8,6 +8,7 @@ abstract class BaseRemoteAuthRepository {
       SignInParams params);
   Future<Either<Failure, UserCredential>> signUpWithEmailAndPassword(
       SignUpParams params);
+  Future<Either<Failure, void>> signOut();
 }
 
 class SignInParams extends Equatable {

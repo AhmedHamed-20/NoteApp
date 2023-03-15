@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/core/const/app_strings.dart';
 import 'package:notes/core/const/const.dart';
 import 'package:notes/features/auth/view/screens/auth_screen.dart';
 
@@ -11,10 +12,10 @@ class SyncNoteAlertDilalog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        'Sync Notes',
+        AppStrings.syncNotes,
         style: Theme.of(context).textTheme.titleLarge,
       ),
-      content: Text('Sync notes with your account?',
+      content: Text(AppStrings.syncNotesMessage,
           style: Theme.of(context).textTheme.titleMedium),
       actions: [
         TextButton(
@@ -22,16 +23,17 @@ class SyncNoteAlertDilalog extends StatelessWidget {
               Navigator.pop(context);
             },
             child: Text(
-              'Cancel',
+              AppStrings.cancel,
               style: Theme.of(context).textTheme.titleMedium,
             )),
         TextButton(
           onPressed: () {
             navigatePushUntiAndRemove(
-                navigateTO: const AuthScreen(), context: context);
+                navigateTO: const AuthScreen(isSyncing: true),
+                context: context);
           },
           child: Text(
-            'Sync',
+            AppStrings.syncData,
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),

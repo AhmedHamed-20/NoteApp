@@ -32,4 +32,14 @@ class AuthRemoteRepositoryImpl extends BaseRemoteAuthRepository {
       return Left(ServerFailure(message: e.message ?? 'error occured'));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> signOut() async {
+    try {
+      await serviceLocator<AuthFirbaseService>().signOut();
+      return const Right(null);
+    } on FirebaseAuthMultiFactorException catch (e) {
+      return Left(ServerFailure(message: e.message ?? 'error occured'));
+    }
+  }
 }

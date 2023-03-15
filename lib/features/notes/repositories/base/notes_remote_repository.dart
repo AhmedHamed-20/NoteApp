@@ -11,6 +11,8 @@ abstract class BaseRemoteNotesRepository {
 
   Future<Either<Failure, void>> updateNoteDate(UpdateNoteDateParams params);
   Future<Either<Failure, void>> deleteNoteData(DeleteNoteDataParams params);
+  Future<Either<Failure, List<NotesModel>>> getNotesFromFirebase(
+      GetNotesFromFirebaseParams params);
 }
 
 class SaveUserNotesToFirestoreParams extends Equatable {
@@ -49,4 +51,14 @@ class DeleteNoteDataParams extends Equatable {
 
   @override
   List<Object?> get props => [userId, firebaseId];
+}
+
+class GetNotesFromFirebaseParams extends Equatable {
+  final String userId;
+  const GetNotesFromFirebaseParams({
+    required this.userId,
+  });
+
+  @override
+  List<Object?> get props => [userId];
 }
