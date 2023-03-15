@@ -24,11 +24,11 @@ class ColorPickerWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(
             AppRadius.r10,
           ),
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).colorScheme.background,
           border: Border.all(
             color: currentActiveTab == currentWidgetIndex
                 ? AppColors.buttonColor
-                : Theme.of(context).backgroundColor,
+                : Theme.of(context).colorScheme.background,
           ),
         ),
         child: Padding(

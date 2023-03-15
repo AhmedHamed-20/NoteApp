@@ -5,11 +5,13 @@ import 'package:notes/core/const/const.dart';
 import '../../view_model/cubit/notes_cubit.dart';
 
 class DeleteNoteAlertDoalogWidget extends StatelessWidget {
-  const DeleteNoteAlertDoalogWidget({Key? key, required this.databaseId})
+  const DeleteNoteAlertDoalogWidget(
+      {Key? key, required this.databaseId, required this.myId})
       : super(
           key: key,
         );
   final int databaseId;
+  final int myId;
   @override
   Widget build(BuildContext context) {
     var notesCubit = BlocProvider.of<NotesCubit>(context);
@@ -39,7 +41,10 @@ class DeleteNoteAlertDoalogWidget extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                notesCubit.deleteNoteFromDatabaseById(databaseId);
+                notesCubit.deleteNoteFromDatabaseById(
+                  databaseId,
+                  myId,
+                );
                 Navigator.pop(context);
               },
               child: Text(
@@ -48,7 +53,7 @@ class DeleteNoteAlertDoalogWidget extends StatelessWidget {
               ),
             ),
           ],
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         );

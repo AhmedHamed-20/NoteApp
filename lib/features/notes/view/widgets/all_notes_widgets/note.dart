@@ -1,24 +1,20 @@
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/core/const/const.dart';
+import 'package:notes/features/notes/models/notes_model.dart';
 
 class Notes extends StatelessWidget {
-  final String body;
-  final String title;
-  final String time;
-  final String color;
-  const Notes(
-      {super.key,
-      required this.body,
-      required this.color,
-      required this.time,
-      required this.title});
+  final NotesModel note;
+  const Notes({
+    super.key,
+    required this.note,
+  });
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(AppPadding.p10),
       decoration: BoxDecoration(
-        color: Color(int.parse(color)),
+        color: Color(int.parse(note.color)),
         borderRadius: BorderRadius.circular(AppRadius.r10),
       ),
       child: Column(
@@ -29,7 +25,7 @@ class Notes extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  note.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context)
@@ -40,7 +36,7 @@ class Notes extends StatelessWidget {
                 const SizedBox(
                   height: AppHeight.h8,
                 ),
-                Text(body,
+                Text(note.body,
                     maxLines: 5,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context)
@@ -64,8 +60,7 @@ class Notes extends StatelessWidget {
               padding: const EdgeInsets.all(AppPadding.p8),
               child: Center(
                 child: Text(
-                    DateTimeFormat.format(DateTime.parse(time),
-                        format: 'D, M j, H:i'),
+                    DateTimeFormat.format(note.date, format: 'D, M j, H:i'),
                     style: Theme.of(context)
                         .textTheme
                         .titleSmall

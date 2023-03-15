@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:notes/core/const/app_strings.dart';
 import 'package:notes/core/const/const.dart';
 import 'package:notes/features/notes/view/screens/edit_add_note_screen.dart';
 
@@ -23,7 +24,7 @@ class MainNoteWidget extends StatelessWidget {
         return state.notes.isEmpty
             ? Center(
                 child: Text(
-                  'No Notes to show',
+                  AppStrings.noNotesToshow,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               )
@@ -42,7 +43,8 @@ class MainNoteWidget extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (_) => DeleteNoteAlertDoalogWidget(
-                        databaseId: state.notes[index].id!,
+                        databaseId: state.notes[index].dataBaseId!,
+                        myId: state.notes[index].myId,
                       ),
                     );
                   },
@@ -53,18 +55,13 @@ class MainNoteWidget extends StatelessWidget {
                       notesCubit.changeActiveColorIndex(colorindex);
                       navigatePushTo(
                           navigateTO: AddEditNoteScreen(
-                            databaseId: state.notes[index].id,
                             isEdit: true,
-                            body: state.notes[index].body,
-                            title: state.notes[index].title,
+                            note: state.notes[index],
                           ),
                           context: context);
                     },
                     child: Notes(
-                      body: state.notes[index].body,
-                      title: state.notes[index].title,
-                      color: state.notes[index].color,
-                      time: state.notes[index].date.toString(),
+                      note: state.notes[index],
                     ),
                   ),
                 ),

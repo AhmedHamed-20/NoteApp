@@ -176,8 +176,6 @@ void flutterToast({
   );
 }
 
-TextEditingController titleControler = TextEditingController();
-TextEditingController bodyControler = TextEditingController();
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double screenHeight(BuildContext context) => MediaQuery.of(context).size.height;
 
@@ -190,3 +188,9 @@ const List<Color> colors = [
   Color(0xff80cbc4),
   Color(0xfff48fb1),
 ];
+
+class AppAssets {
+  static const noImage = 'assets/images/noImage.jpg';
+  static const String defaultImage =
+      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png';
+}

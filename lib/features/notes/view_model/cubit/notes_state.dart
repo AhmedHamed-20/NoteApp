@@ -10,6 +10,8 @@ class NoteState extends Equatable {
   final int activeColorIndex;
   final String errorMessage;
   final ThemeModeValue themeModeValue;
+  final ReadNotesFromFirebaseAndStoreItInDatabaseRequestStatus
+      readNotesFromFirebaseAndStoreItInDatabaseRequestStatus;
   const NoteState(
       {this.notes = const [],
       this.errorMessage = '',
@@ -17,6 +19,8 @@ class NoteState extends Equatable {
       this.activeColorIndex = 0,
       this.notesUpdateStatus = UpdateNotesRequestStatus.loading,
       this.notesAddStatus = AddNotesRequestStatus.loading,
+      this.readNotesFromFirebaseAndStoreItInDatabaseRequestStatus =
+          ReadNotesFromFirebaseAndStoreItInDatabaseRequestStatus.idle,
       this.notesDeleteStatus = DeleteNotesByIdRequestStatus.loading,
       this.notesStatus = GetNotesRequestStatus.loading});
 
@@ -25,12 +29,17 @@ class NoteState extends Equatable {
     int? activeColorIndex,
     String? errorMessage,
     List<NotesModel>? notes,
+    ReadNotesFromFirebaseAndStoreItInDatabaseRequestStatus?
+        readNotesFromFirebaseAndStoreItInDatabaseRequestStatus,
     AddNotesRequestStatus? notesAddStatus,
     DeleteNotesByIdRequestStatus? notesDeleteStatus,
     GetNotesRequestStatus? notesStatus,
     UpdateNotesRequestStatus? notesUpdateStatus,
   }) {
     return NoteState(
+      readNotesFromFirebaseAndStoreItInDatabaseRequestStatus:
+          readNotesFromFirebaseAndStoreItInDatabaseRequestStatus ??
+              this.readNotesFromFirebaseAndStoreItInDatabaseRequestStatus,
       themeModeValue: themeModeValue ?? this.themeModeValue,
       activeColorIndex: activeColorIndex ?? this.activeColorIndex,
       errorMessage: errorMessage ?? this.errorMessage,
@@ -45,6 +54,7 @@ class NoteState extends Equatable {
   @override
   List<Object?> get props => [
         errorMessage,
+        readNotesFromFirebaseAndStoreItInDatabaseRequestStatus,
         notes,
         notesStatus,
         themeModeValue,

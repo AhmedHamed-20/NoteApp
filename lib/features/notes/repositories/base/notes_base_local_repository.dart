@@ -3,13 +3,17 @@ import 'package:equatable/equatable.dart';
 import 'package:notes/core/error/failure.dart';
 import 'package:notes/features/notes/models/notes_model.dart';
 
-abstract class NotesBaseRepository {
+abstract class NotesBaseLocalRepository {
   Future<Either<Failure, List<NotesModel>>> getNotes(NotesGetParams params);
   Future<Either<Failure, void>> addNote(NoteAddingParams params);
   Future<Either<Failure, void>> updateNote(NoteUpdateParams params);
   Future<Either<Failure, void>> deleteNoteById(NoteDeleteParams params);
   Future<Either<Failure, bool>> getActiceTheme(ActiveThemeParams params);
   Future<Either<Failure, void>> setActiveTheme(ActiveThemeSetParams params);
+  Future<Either<Failure, List<Object?>>> insertNotes(
+      InsertNotesToDatabaseParams params);
+
+  Future<Either<Failure, void>> deleteAllNotes(DeleteAllNotesParams params);
 }
 
 class ActiveThemeParams extends Equatable {
@@ -41,17 +45,19 @@ class NoteAddingParams extends Equatable {
   final String noteBody;
   final String noteColor;
   final String noteDate;
+  final int myId;
   const NoteAddingParams({
     required this.tableName,
     required this.noteTitle,
     required this.noteColor,
     required this.noteDate,
     required this.noteBody,
+    required this.myId,
   });
 
   @override
   List<Object?> get props =>
-      [tableName, noteTitle, noteBody, noteColor, noteDate];
+      [tableName, noteTitle, noteBody, noteColor, noteDate, myId];
 }
 
 class NoteUpdateParams extends Equatable {
@@ -68,8 +74,13 @@ class NoteUpdateParams extends Equatable {
       required this.noteColor});
 
   @override
-  List<Object?> get props =>
-      [databaseId, tableName, noteBody, noteColor, noteTitle];
+  List<Object?> get props => [
+        databaseId,
+        tableName,
+        noteBody,
+        noteColor,
+        noteTitle,
+      ];
 }
 
 class NoteDeleteParams extends Equatable {
@@ -84,6 +95,32 @@ class NoteDeleteParams extends Equatable {
   @override
   List<Object?> get props => [
         databaseId,
+        tableName,
+      ];
+}
+
+class InsertNotesToDatabaseParams extends Equatable {
+  final List<Map<String, dynamic>> notes;
+
+  const InsertNotesToDatabaseParams(
+    this.notes,
+  );
+
+  @override
+  List<Object?> get props => [
+        notes,
+      ];
+}
+
+class DeleteAllNotesParams extends Equatable {
+  final String tableName;
+
+  const DeleteAllNotesParams(
+    this.tableName,
+  );
+
+  @override
+  List<Object?> get props => [
         tableName,
       ];
 }
