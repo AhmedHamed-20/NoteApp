@@ -7,7 +7,6 @@ import 'package:notes/core/theme/app_theme.dart';
 import '../../view_model/cubit/notes_cubit.dart';
 import '../widgets/all_notes_widgets/note_widget.dart';
 import '../widgets/sync_data_widget.dart';
-import '../widgets/sync_notes_alert_dialog.dart';
 import 'edit_add_note_screen.dart';
 
 class AllNotesScreen extends StatelessWidget {

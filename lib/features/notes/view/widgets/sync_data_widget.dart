@@ -27,25 +27,19 @@ class _SyncDataWidgetState extends State<SyncDataWidget> {
   Widget build(BuildContext context) {
     return Visibility(
       visible: hasInternet,
-      replacement: StreamBuilder<User?>(
-          stream: serviceLocator<FirebaseAuth>().authStateChanges(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return IconButton(
-                  icon: Icon(Icons.sync,
-                      color: Theme.of(context).iconTheme.color),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => const SyncNoteAlertDilalog());
-                  });
-            } else {
-              return CachedNetworkImageCirclePhoto(
-                photoUrl: snapshot.data!.photoURL ?? AppAssets.defaultImage,
-                photoRadius: 40,
-              );
-            }
-          }),
+      replacement: serviceLocator<FirebaseAuth>().currentUser != null
+          ? CachedNetworkImageCirclePhoto(
+              photoUrl: serviceLocator<FirebaseAuth>().currentUser!.photoURL ??
+                  AppAssets.defaultImage,
+              photoRadius: 40,
+            )
+          : IconButton(
+              icon: Icon(Icons.sync, color: Theme.of(context).iconTheme.color),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => const SyncNoteAlertDilalog());
+              }),
       child: const SizedBox.shrink(),
     );
   }

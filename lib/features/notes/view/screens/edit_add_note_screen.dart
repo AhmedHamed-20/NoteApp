@@ -64,13 +64,14 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
 
                 notesCubit.getNotes();
                 notesCubit.resetStatus();
+
                 navigatePushUntiAndRemove(
                     navigateTO: const AllNotesScreen(), context: context);
               }
             },
             builder: (context, state) {
               return TextButton(
-                onPressed: () {
+                onPressed: () async {
                   final int colorHexa = colors[state.activeColorIndex].value;
                   if (widget.isEdit) {
                     notesCubit.updateNoteToDatabase(

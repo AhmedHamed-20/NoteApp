@@ -1,19 +1,25 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/core/const/app_strings.dart';
 import 'package:notes/core/theme/app_theme.dart';
 import 'package:notes/core/utls/utls.dart';
-import 'package:notes/features/notes/repositories/base/notes_base_repository.dart';
+import 'package:notes/features/notes/repositories/base/notes_base_local_repository.dart';
+import 'package:notes/features/notes/repositories/base/notes_remote_repository.dart';
 
+import '../../../../core/services/service_locator.dart';
 import '../../models/notes_model.dart';
 
 part 'notes_state.dart';
 
 class NotesCubit extends Cubit<NoteState> {
-  NotesCubit(this.notesBaseRepository) : super(const NoteState());
+  NotesCubit(this.notesBaseRepository, this.baseRemoteNotesRepository)
+      : super(const NoteState());
 
-  final NotesBaseRepository notesBaseRepository;
-
+  final NotesBaseLocalRepository notesBaseRepository;
+  final BaseRemoteNotesRepository baseRemoteNotesRepository;
   void changeActiveColorIndex(int index) {
     emit(state.copyWith(activeColorIndex: index));
   }
@@ -42,7 +48,7 @@ class NotesCubit extends Cubit<NoteState> {
     });
   }
 
-  Future<void> deleteNoteFromDatabaseById(int databaseId) async {
+  Future<void> deleteNoteFromDatabaseById(int databaseId, int myId) async {
     final result = await notesBaseRepository
         .deleteNoteById(NoteDeleteParams(databaseId, 'notes'));
     result.fold((l) {
@@ -50,9 +56,12 @@ class NotesCubit extends Cubit<NoteState> {
           notesDeleteStatus: DeleteNotesByIdRequestStatus.failure,
           errorMessage: l.message));
     }, (r) {
-      emit(state.copyWith(
-          notesDeleteStatus: DeleteNotesByIdRequestStatus.success,
-          errorMessage: ''));
+      deleteNoteFromFirebaseIfSignedInAndHaveInternet(myId);
+      emit(
+        state.copyWith(
+            notesDeleteStatus: DeleteNotesByIdRequestStatus.success,
+            errorMessage: ''),
+      );
     });
   }
 
@@ -65,6 +74,7 @@ class NotesCubit extends Cubit<NoteState> {
         noteBody: noteBody,
         noteColor: noteColor,
         noteDate: noteDate,
+        myId: state.notes.length + 1,
         noteTitle: noteTitle,
         tableName: 'notes'));
     result.fold((l) {
@@ -72,6 +82,16 @@ class NotesCubit extends Cubit<NoteState> {
           notesAddStatus: AddNotesRequestStatus.failure,
           errorMessage: l.message));
     }, (r) {
+      saveNoteToFirebaseIfSignedInAndHaveInternet(
+        NotesModel(
+          dataBaseId: state.notes.length + 1,
+          color: noteColor,
+          title: noteTitle,
+          myId: state.notes.length + 1,
+          body: noteBody,
+          date: DateTime.parse(noteDate),
+        ),
+      );
       emit(state.copyWith(
           notesAddStatus: AddNotesRequestStatus.success, errorMessage: ''));
     });
@@ -93,6 +113,16 @@ class NotesCubit extends Cubit<NoteState> {
           notesUpdateStatus: UpdateNotesRequestStatus.failure,
           errorMessage: l.message));
     }, (r) {
+      updateNoteToFirebaseIfSignedInAndHaveInternet(
+        NotesModel(
+          dataBaseId: databaseId,
+          color: noteColor,
+          title: noteTitle,
+          myId: state.notes[databaseId - 1].myId,
+          body: noteBody,
+          date: state.notes[databaseId - 1].date,
+        ),
+      );
       emit(state.copyWith(
           notesUpdateStatus: UpdateNotesRequestStatus.success,
           errorMessage: ''));
@@ -131,5 +161,82 @@ class NotesCubit extends Cubit<NoteState> {
             errorMessage: '', themeModeValue: ThemeModeValue.light));
       }
     });
+  }
+
+  Future<void> saveNoteToFirebase(SaveUserNotesToFirestoreParams params) async {
+    final result = await baseRemoteNotesRepository.saveUserNotes(params);
+    result.fold((l) {
+      emit(state.copyWith(errorMessage: l.message));
+    }, (r) {
+      emit(state.copyWith(errorMessage: ''));
+    });
+  }
+
+  void saveNoteToFirebaseIfSignedInAndHaveInternet(
+      NotesModel notesModel) async {
+    if (serviceLocator<FirebaseAuth>().currentUser != null) {
+      await saveNoteToFirebase(
+        SaveUserNotesToFirestoreParams(
+          notesModel: notesModel,
+          userId: serviceLocator<FirebaseAuth>().currentUser!.uid,
+        ),
+      );
+    }
+  }
+
+  Future<void> updateNoteToFirebase(UpdateNoteDateParams params) async {
+    final result = await baseRemoteNotesRepository.updateNoteDate(params);
+    result.fold((l) {
+      emit(state.copyWith(errorMessage: l.message));
+    }, (r) {
+      emit(state.copyWith(errorMessage: ''));
+    });
+  }
+
+  void updateNoteToFirebaseIfSignedInAndHaveInternet(
+      NotesModel notesModel) async {
+    if (serviceLocator<FirebaseAuth>().currentUser != null) {
+      final firebaseId = await serviceLocator<FirebaseFirestore>()
+          .collection(AppStrings.collectionUsers)
+          .doc(serviceLocator<FirebaseAuth>().currentUser!.uid)
+          .collection(AppStrings.collectionNotes)
+          .where('myId', isEqualTo: notesModel.myId)
+          .get()
+          .then((value) => value.docs[0].id);
+      await updateNoteToFirebase(
+        UpdateNoteDateParams(
+          note: notesModel,
+          userId: serviceLocator<FirebaseAuth>().currentUser!.uid,
+          firebaseId: firebaseId,
+        ),
+      );
+    }
+  }
+
+  Future<void> deleteNoteFromFirebase(DeleteNoteDataParams params) async {
+    final result = await baseRemoteNotesRepository.deleteNoteData(params);
+    result.fold((l) {
+      emit(state.copyWith(errorMessage: l.message));
+    }, (r) {
+      emit(state.copyWith(errorMessage: ''));
+    });
+  }
+
+  void deleteNoteFromFirebaseIfSignedInAndHaveInternet(int myId) async {
+    if (serviceLocator<FirebaseAuth>().currentUser != null) {
+      final firebaseId = await serviceLocator<FirebaseFirestore>()
+          .collection(AppStrings.collectionUsers)
+          .doc(serviceLocator<FirebaseAuth>().currentUser!.uid)
+          .collection(AppStrings.collectionNotes)
+          .where('myId', isEqualTo: myId)
+          .get()
+          .then((value) => value.docs[0].id);
+      await deleteNoteFromFirebase(
+        DeleteNoteDataParams(
+          userId: serviceLocator<FirebaseAuth>().currentUser!.uid,
+          firebaseId: firebaseId,
+        ),
+      );
+    }
   }
 }

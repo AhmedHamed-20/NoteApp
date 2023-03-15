@@ -26,7 +26,8 @@ class DatabaseProvider {
 
   static Future<int> deleteDataFromDatabaseById(
       {required int id, required String tableName}) async {
-    return await database.rawDelete('DELETE FROM $tableName WHERE  id=$id');
+    return await database
+        .rawDelete('DELETE FROM $tableName WHERE  dataBaseId=$id');
   }
 
   static Future<int> deleteAllDataCartsFromDatabase(

@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:notes/core/services/service_locator.dart';
 import 'package:notes/features/auth/repositories/base/base_auth_remote_repository.dart';
 
-import '../../../../core/authService/auth_service.dart';
+import '../../../../core/services/authService/auth_service.dart';
 
 class AuthRemoteRepositoryImpl extends BaseRemoteAuthRepository {
   @override

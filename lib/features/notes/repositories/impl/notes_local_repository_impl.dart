@@ -4,9 +4,9 @@ import 'package:notes/core/services/service_locator.dart';
 import 'package:notes/features/notes/models/notes_model.dart';
 import 'package:notes/core/error/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:notes/features/notes/repositories/base/notes_base_repository.dart';
+import 'package:notes/features/notes/repositories/base/notes_base_local_repository.dart';
 
-class NotesLocalRepositoryImpl extends NotesBaseRepository {
+class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
   @override
   Future<Either<Failure, void>> addNote(NoteAddingParams params) async {
     try {
@@ -16,8 +16,10 @@ class NotesLocalRepositoryImpl extends NotesBaseRepository {
           params.noteBody,
           params.noteColor,
           params.noteDate,
+          params.myId
         ],
-        query: 'INSERT INTO notes(title, body, color,time) VALUES(?, ?, ?, ?)',
+        query:
+            'INSERT INTO notes(title, body, color,time, myId) VALUES(?, ?, ?, ?, ?)',
       );
       return Right(result);
     } on Exception catch (e) {
@@ -28,9 +30,9 @@ class NotesLocalRepositoryImpl extends NotesBaseRepository {
   @override
   Future<Either<Failure, void>> deleteNoteById(NoteDeleteParams params) async {
     try {
-      final result = await DatabaseProvider.deleteDataFromDatabaseById(
+      await DatabaseProvider.deleteDataFromDatabaseById(
           tableName: params.tableName, id: params.databaseId);
-      return Right(result);
+      return const Right(null);
     } on Exception catch (e) {
       return Left(DatabaseFailure(message: e.toString()));
     }
@@ -52,15 +54,15 @@ class NotesLocalRepositoryImpl extends NotesBaseRepository {
   @override
   Future<Either<Failure, void>> updateNote(NoteUpdateParams params) async {
     try {
-      final result = await DatabaseProvider.updateDataBase(
-          'UPDATE ${params.tableName} SET  title= ?, body = ? ,color= ? WHERE id = ?',
+      await DatabaseProvider.updateDataBase(
+          'UPDATE ${params.tableName} SET  title= ?, body = ? ,color= ? WHERE dataBaseId = ?',
           [
             params.noteTitle,
             params.noteBody,
             params.noteColor,
             params.databaseId
           ]);
-      return Right(result);
+      return const Right(null);
     } on Exception catch (e) {
       return Left(DatabaseFailure(message: e.toString()));
     }
@@ -81,9 +83,9 @@ class NotesLocalRepositoryImpl extends NotesBaseRepository {
   Future<Either<Failure, void>> setActiveTheme(
       ActiveThemeSetParams params) async {
     try {
-      final result = serviceLocator<CacheHelper>()
+      serviceLocator<CacheHelper>()
           .setData(key: params.key, value: params.value);
-      return Right(result);
+      return const Right(null);
     } on Exception catch (e) {
       return Left(CacheFailure(message: e.toString()));
     }

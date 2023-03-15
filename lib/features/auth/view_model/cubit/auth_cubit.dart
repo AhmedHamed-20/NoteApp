@@ -23,7 +23,6 @@ class AuthCubit extends Cubit<AuthState> {
                 statusCode: failure.statusCode,
               ),
             ), (userCredential) {
-      print(userCredential);
       emit(
         state.copyWith(
           signInRequestStatus: AuthRequestStatus.success,
@@ -45,7 +44,6 @@ class AuthCubit extends Cubit<AuthState> {
                 statusCode: failure.statusCode,
               ),
             ), (userCredential) {
-      print(userCredential);
       emit(
         state.copyWith(
           signUpRequestStatus: AuthRequestStatus.success,

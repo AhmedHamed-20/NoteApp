@@ -5,7 +5,8 @@ import 'package:equatable/equatable.dart';
 
 //CREATE TABLE notes (id INTEGER PRIMARY KEY, title TEXT, body TEXT, Color TEXT,time TEXT
 class NotesModel extends Equatable {
-  final int? id;
+  final int? dataBaseId;
+  final int myId;
   final String title;
   final String body;
   final DateTime date;
@@ -13,27 +14,30 @@ class NotesModel extends Equatable {
 
   const NotesModel({
     required this.color,
-    this.id,
+    this.dataBaseId,
     required this.title,
+    required this.myId,
     required this.body,
     required this.date,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
+      'dataBaseId': dataBaseId,
       'title': title,
+      'myId': myId,
       'body': body,
-      'date': date.millisecondsSinceEpoch,
+      'date': date,
       'color': color,
     };
   }
 
   factory NotesModel.fromMap(Map<String, dynamic> map) {
     return NotesModel(
-      id: map['id'] as int,
+      dataBaseId: map['dataBaseId'] as int,
       title: map['title'] as String,
       body: map['body'] as String,
+      myId: map['myId'] as int,
       date: DateTime.parse(map['time'] as String),
       color: map['color'] as String,
     );
@@ -42,5 +46,5 @@ class NotesModel extends Equatable {
   factory NotesModel.fromJson(String source) =>
       NotesModel.fromMap(json.decode(source) as Map<String, dynamic>);
   @override
-  List<Object?> get props => [id, title, body, date, color];
+  List<Object?> get props => [dataBaseId, title, body, date, color, myId];
 }

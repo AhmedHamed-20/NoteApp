@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:notes/core/error/failure.dart';
 import 'package:notes/features/notes/models/notes_model.dart';
 
-abstract class NotesBaseRepository {
+abstract class NotesBaseLocalRepository {
   Future<Either<Failure, List<NotesModel>>> getNotes(NotesGetParams params);
   Future<Either<Failure, void>> addNote(NoteAddingParams params);
   Future<Either<Failure, void>> updateNote(NoteUpdateParams params);
@@ -41,17 +41,19 @@ class NoteAddingParams extends Equatable {
   final String noteBody;
   final String noteColor;
   final String noteDate;
+  final int myId;
   const NoteAddingParams({
     required this.tableName,
     required this.noteTitle,
     required this.noteColor,
     required this.noteDate,
     required this.noteBody,
+    required this.myId,
   });
 
   @override
   List<Object?> get props =>
-      [tableName, noteTitle, noteBody, noteColor, noteDate];
+      [tableName, noteTitle, noteBody, noteColor, noteDate, myId];
 }
 
 class NoteUpdateParams extends Equatable {
@@ -68,8 +70,13 @@ class NoteUpdateParams extends Equatable {
       required this.noteColor});
 
   @override
-  List<Object?> get props =>
-      [databaseId, tableName, noteBody, noteColor, noteTitle];
+  List<Object?> get props => [
+        databaseId,
+        tableName,
+        noteBody,
+        noteColor,
+        noteTitle,
+      ];
 }
 
 class NoteDeleteParams extends Equatable {

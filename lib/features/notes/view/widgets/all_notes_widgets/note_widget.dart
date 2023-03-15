@@ -42,7 +42,8 @@ class MainNoteWidget extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (_) => DeleteNoteAlertDoalogWidget(
-                        databaseId: state.notes[index].id!,
+                        databaseId: state.notes[index].dataBaseId!,
+                        myId: state.notes[index].myId,
                       ),
                     );
                   },
@@ -53,7 +54,7 @@ class MainNoteWidget extends StatelessWidget {
                       notesCubit.changeActiveColorIndex(colorindex);
                       navigatePushTo(
                           navigateTO: AddEditNoteScreen(
-                            databaseId: state.notes[index].id,
+                            databaseId: state.notes[index].dataBaseId,
                             isEdit: true,
                             body: state.notes[index].body,
                             title: state.notes[index].title,

@@ -24,7 +24,7 @@ void main() async {
   await DatabaseProvider.init(
       databasesName: 'notes.db',
       query:
-          'CREATE TABLE notes (id INTEGER PRIMARY KEY, title TEXT, body TEXT, color TEXT,time TEXT)',
+          'CREATE TABLE notes (dataBaseId INTEGER PRIMARY KEY, title TEXT, body TEXT, color TEXT,time TEXT, myId INTEGER)',
       version: 1);
   runApp(MyApp(
     skipAuth: skipAuth,
