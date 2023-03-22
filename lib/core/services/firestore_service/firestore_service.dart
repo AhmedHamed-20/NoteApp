@@ -4,22 +4,22 @@ import 'package:notes/core/const/app_strings.dart';
 import 'package:notes/features/notes/models/notes_model.dart';
 
 class FirestoreService {
-  final FirebaseFirestore _firestore;
+  final FirebaseFirestore firestore;
 
-  FirestoreService(this._firestore);
+  FirestoreService(this.firestore);
 
   Future<DocumentReference<Map<String, dynamic>>> saveUserNotes({
     required NotesModel notesModel,
     required String userId,
   }) async {
     if (await InternetConnectionChecker().hasConnection) {
-      return await _firestore
+      return await firestore
           .collection(AppStrings.collectionUsers)
           .doc(userId)
           .collection(AppStrings.collectionNotes)
           .add(notesModel.toMap());
     } else {
-      return _firestore
+      return firestore
           .collection(AppStrings.collectionUsers)
           .doc(userId)
           .collection(AppStrings.collectionNotes)
@@ -32,14 +32,14 @@ class FirestoreService {
       required String userId,
       required String firebaseId}) async {
     if (await InternetConnectionChecker().hasConnection) {
-      return await _firestore
+      return await firestore
           .collection(AppStrings.collectionUsers)
           .doc(userId)
           .collection(AppStrings.collectionNotes)
           .doc(firebaseId)
           .update(note.toMap());
     } else {
-      return _firestore
+      return firestore
           .collection(AppStrings.collectionUsers)
           .doc(userId)
           .collection(AppStrings.collectionNotes)
@@ -51,14 +51,14 @@ class FirestoreService {
   Future<void> removeNote(
       {required String userId, required String firebaseId}) async {
     if (await InternetConnectionChecker().hasConnection) {
-      return await _firestore
+      return await firestore
           .collection(AppStrings.collectionUsers)
           .doc(userId)
           .collection(AppStrings.collectionNotes)
           .doc(firebaseId)
           .delete();
     } else {
-      return _firestore
+      return firestore
           .collection(AppStrings.collectionUsers)
           .doc(userId)
           .collection(AppStrings.collectionNotes)
@@ -69,7 +69,7 @@ class FirestoreService {
 
   Future<QuerySnapshot<Map<String, dynamic>>> getNotesFromFirebase(
       {required String userId}) async {
-    return await _firestore
+    return await firestore
         .collection(AppStrings.collectionUsers)
         .doc(userId)
         .collection(AppStrings.collectionNotes)
