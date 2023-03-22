@@ -8,8 +8,8 @@ abstract class NotesBaseLocalRepository {
   Future<Either<Failure, void>> addNote(NoteAddingParams params);
   Future<Either<Failure, void>> updateNote(NoteUpdateParams params);
   Future<Either<Failure, void>> deleteNoteById(NoteDeleteParams params);
-  Future<Either<Failure, bool>> getActiceTheme(ActiveThemeParams params);
-  Future<Either<Failure, void>> setActiveTheme(ActiveThemeSetParams params);
+  Future<Either<Failure, bool>> getIsDarkThemeValue(ActiveThemeParams params);
+  Future<Either<Failure, void>> setIsDarkThemValue(ActiveThemeSetParams params);
   Future<Either<Failure, List<Object?>>> insertNotes(
       InsertNotesToDatabaseParams params);
 

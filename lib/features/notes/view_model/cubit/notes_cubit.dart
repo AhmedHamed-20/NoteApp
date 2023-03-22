@@ -140,7 +140,7 @@ class NotesCubit extends Cubit<NoteState> {
   Future<void> cacheThemeMode(
       {required String key, required bool isDark}) async {
     final result = await notesBaseRepository
-        .setActiveTheme(ActiveThemeSetParams(key, isDark));
+        .setIsDarkThemValue(ActiveThemeSetParams(key, isDark));
 
     result.fold((l) {
       emit(state.copyWith(errorMessage: l.message));
@@ -151,7 +151,7 @@ class NotesCubit extends Cubit<NoteState> {
 
   void getCachedThemeMode({required String key}) async {
     final result =
-        await notesBaseRepository.getActiceTheme(ActiveThemeParams(key));
+        await notesBaseRepository.getIsDarkThemeValue(ActiveThemeParams(key));
     result.fold((l) {
       emit(state.copyWith(errorMessage: l.message));
     }, (r) {

@@ -8,10 +8,13 @@ import 'package:dartz/dartz.dart';
 import 'package:notes/features/notes/repositories/base/notes_base_local_repository.dart';
 
 class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
+  final DatabaseProvider _databaseProvider;
+  final CacheHelper _cacheHelper;
+  NotesLocalRepositoryImpl(this._databaseProvider, this._cacheHelper);
   @override
   Future<Either<Failure, void>> addNote(NoteAddingParams params) async {
     try {
-      final result = await DatabaseProvider.insertIntoDataBase(
+      final result = await _databaseProvider.insertIntoDataBase(
         data: [
           params.noteTitle,
           params.noteBody,
@@ -30,7 +33,7 @@ class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
   @override
   Future<Either<Failure, void>> deleteNoteById(NoteDeleteParams params) async {
     try {
-      await DatabaseProvider.deleteDataFromDatabaseById(
+      await _databaseProvider.deleteDataFromDatabaseById(
           tableName: params.tableName, id: params.databaseId);
       return const Right(null);
     } on Exception catch (e) {
@@ -42,7 +45,7 @@ class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
   Future<Either<Failure, List<NotesModel>>> getNotes(
       NotesGetParams params) async {
     try {
-      final result = await DatabaseProvider.getAllDataFromDatabase(
+      final result = await _databaseProvider.getAllDataFromDatabase(
         params.tableName,
       );
       return Right(List.from(result
@@ -55,7 +58,7 @@ class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
   @override
   Future<Either<Failure, void>> updateNote(NoteUpdateParams params) async {
     try {
-      await DatabaseProvider.updateDataBase(AppStrings.updateDataBaseQuer, [
+      await _databaseProvider.updateDataBase(AppStrings.updateDataBaseQuer, [
         params.noteTitle,
         params.noteBody,
         params.noteColor,
@@ -68,10 +71,10 @@ class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> getActiceTheme(ActiveThemeParams params) async {
+  Future<Either<Failure, bool>> getIsDarkThemeValue(
+      ActiveThemeParams params) async {
     try {
-      final result =
-          await serviceLocator<CacheHelper>().getData(key: params.key);
+      final result = await _cacheHelper.getData(key: params.key);
       return Right(result ?? false);
     } on Exception catch (e) {
       return Left(CacheFailure(message: e.toString()));
@@ -79,11 +82,10 @@ class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
   }
 
   @override
-  Future<Either<Failure, void>> setActiveTheme(
+  Future<Either<Failure, void>> setIsDarkThemValue(
       ActiveThemeSetParams params) async {
     try {
-      serviceLocator<CacheHelper>()
-          .setData(key: params.key, value: params.value);
+      _cacheHelper.setData(key: params.key, value: params.value);
       return const Right(null);
     } on Exception catch (e) {
       return Left(CacheFailure(message: e.toString()));
@@ -94,7 +96,7 @@ class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
   Future<Either<Failure, List<Object?>>> insertNotes(
       InsertNotesToDatabaseParams params) async {
     try {
-      final result = await DatabaseProvider.insertListToDatabase(params.notes);
+      final result = await _databaseProvider.insertListToDatabase(params.notes);
       return Right(result);
     } on Exception catch (e) {
       return Left(DatabaseFailure(message: e.toString()));
@@ -105,7 +107,7 @@ class NotesLocalRepositoryImpl extends NotesBaseLocalRepository {
   Future<Either<Failure, void>> deleteAllNotes(
       DeleteAllNotesParams params) async {
     try {
-      await DatabaseProvider.deleteAllDataFromDatabase(
+      await _databaseProvider.deleteAllDataFromDatabase(
           tableName: params.tableName);
       return const Right(null);
     } on Exception catch (e) {

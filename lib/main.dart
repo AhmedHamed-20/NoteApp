@@ -21,7 +21,7 @@ void main() async {
   final skipAuth =
       await serviceLocator<CacheHelper>().getData(key: AppStrings.skipSignIn) ??
           false;
-  await DatabaseProvider.init(
+  serviceLocator<DatabaseProvider>().init(
       databasesName: '${AppStrings.tableName}.db',
       query: AppStrings.createDataBaseQuery,
       version: 1);
