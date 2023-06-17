@@ -21,6 +21,21 @@ jobs:
         with:
           flutter-version: '3.10.2'
       - run: flutter pub get
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+
+      - name: Set up Firebase
+        uses: firebase/firebase-tools-action@v1
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Create google_client_id.dart
+        run: |
+          echo "class GoogleClientId {" >> lib/core/const/google_client_id.dart
+          echo "  static const String clientId = '${{ secrets.GOOGLE_CLIENT_ID }}';" >> lib/google_client_id.dart
+          echo "}" >> lib/core/const/google_client_id.dart
       - run: flutter test
       - run: flutter build apk --debug --split-per-abi
       - run: |
