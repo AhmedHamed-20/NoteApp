@@ -26,11 +26,15 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Set up Firebase
-        uses: firebase/github-action@v1
-        with:
-          project_id: ${{ secrets.PROJECT_ID }}
-          token: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Authenticate with Firebase
+        run: firebase login:ci --no-localhost --token "${{ secrets.FIREBASE_TOKEN }}"
+      - name: activate firebase cli global 
+        run: dart pub global activate flutterfire_cli
+      - name: configure flutterfire
+        run: flutterfire configure --project=${{ secrets.PROJECT_ID }}
       - name: Create google_client_id.dart
         run: |
           echo "class GoogleClientId {" >> lib/core/const/google_client_id.dart
