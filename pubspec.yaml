@@ -40,7 +40,7 @@ dependencies:
   google_fonts: ^3.0.1
   google_sign_in: ^6.0.2
   internet_connection_checker: ^1.0.0+1
-  intl: ^0.17.0
+  intl: ^0.18.0
   shared_preferences: ^2.0.6
   sqflite: ^2.0.0+3
 
