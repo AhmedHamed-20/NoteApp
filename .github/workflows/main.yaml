@@ -27,7 +27,7 @@ jobs:
           node-version: '14'
 
       - name: Set up Firebase
-        uses: firebase/firebase-tools-action@v1
+        uses: firebase/github-action@v1
         with:
           project_id: ${{ secrets.PROJECT_ID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
